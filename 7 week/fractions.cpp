@@ -5,8 +5,8 @@ using namespace std;
 class Fraction
 {
 private:
-  float numer; //числитель
-  unsigned int denom; //знаменатель
+  float numer; //Г·ГЁГ±Г«ГЁГІГҐГ«Гј
+  unsigned int denom; //Г§Г­Г Г¬ГҐГ­Г ГІГҐГ«Гј
 public:
   Fraction ()
   {
@@ -50,7 +50,7 @@ public:
     return n*m / NOD (n, m);
   }
 
-  Fraction reduce () //сокращение дроби
+  Fraction reduce () //Г±Г®ГЄГ°Г Г№ГҐГ­ГЁГҐ Г¤Г°Г®ГЎГЁ
   {
   }
 
