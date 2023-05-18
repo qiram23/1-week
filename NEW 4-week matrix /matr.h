@@ -65,7 +65,7 @@ class Matrix
     return mat[x][y];
   }
 
-  Matrix<Rows, Columns, T>& operator = (const Matrix& q)
+  Matrix<Rows, Columns, T>& operator = (const Matrix<Rows, Columns, T>& q)
   {
     if (this == &q)
     {
@@ -100,7 +100,7 @@ class Matrix
     return c;
   }
 
-  Matrix<Rows, Columns, T> operator - (const Matrix& q)
+  Matrix<Rows, Columns, T> operator - (const Matrix<Rows, Columns, T>& q)
   {
     SizeCheck(q);
     Matrix<Rows, Columns, T> c;
@@ -114,16 +114,15 @@ class Matrix
     return c;
   }
 
-  template<unsigned RowsQ, unsigned ColumnsQ>
-  Matrix<Rows, Columns, T> operator * (const Matrix<RowsQ, ColumnsQ, T>& q)
+  template<unsigned L, unsigned M, unsigned R, typename T_ = float>
+  Matrix<L, R, T> operator * (const Matrix<L, M, T>& q)
   {
-    assert (Columns == RowsQ);
-    Matrix<Rows, ColumnsQ, T> c;
-    for (int i = 0; i < Rows; ++i)
+    Matrix<L, R, T> c;
+    for (int i = 0; i < L; ++i)
     {
-      for (int j = 0; j < ColumnsQ; ++j)
+      for (int j = 0; j < R; ++j)
       {
-        for (int k = 0; k < Columns; ++k)
+        for (int k = 0; k < M; ++k)
         {
           c.mat[i][j] += (mat[i][k] * q.mat[k][j]);
         }
