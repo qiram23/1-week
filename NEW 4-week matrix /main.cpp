@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Matrix&& Transpose(Matrix q)
+/*Matrix&& Transpose(Matrix q)
   {
     Matrix c(q.Columns, q.Rows);
 
@@ -17,10 +17,13 @@ Matrix&& Transpose(Matrix q)
     }
     c.Print();
     return move(c);
-  }
+  }*/
 
 int main(){
-  Matrix a(3, 2), b(3, 2), c(2, 4), e(3, 3), d(3,3);
+
+  Matrix<3, 2, int> a, b;
+  Matrix<2, 4, int> c;
+  Matrix<2, 4, int> e, d;
 
   a.set_(0, 0, 1);
   a.set_(1, 1, 2);
@@ -66,6 +69,9 @@ int main(){
   e.Print();
   cout << endl;
 
-  cout << "Transpose e:" << endl;
-  d = Transpose(e);
+  /*cout << "Transpose e:" << endl;*/
+  //d = Transpose(e);
+
+
+
 }
