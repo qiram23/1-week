@@ -6,58 +6,46 @@
 
 using namespace std;
 
+template <unsigned Rows, unsigned Columns, typename T = float>
+
 class Matrix
 {
   public:
-    int Rows, Columns;
-    float **mat;
+    static const int Rows_ = Rows;
+    static const int Columns_ = Columns;
+    T  **mat;
 
-  Matrix(int rows, int columns) : Rows(rows), Columns(columns)
-  {
-    newMatrix();
-    for (int i = 0; i < Rows; ++i)
-      {
-        for (int j = 0; j < Columns; ++j)
+
+  Matrix()
+    {
+      newMatrix();
+        for (int i = 0; i < Rows; ++i)
         {
-          mat[i][j] = 0;
+            for (int j = 0; j < Columns; ++j)
+            {
+                mat[i][j] = 0;
+            }
         }
-      }
-  }
-
-  Matrix(const Matrix& q) : Rows(q.Rows), Columns(q.Columns)
-  {
-    newMatrix();
-    for (int i = 0; i < Rows; ++i)
-    {
-      for (int j = 0; j < Columns; ++j)
-      {
-        mat[i][j] = move(q.mat[i][j]);
-      }
     }
-  }
-
-  ~Matrix()
-  {
-    for (int i = 0; i < Rows; ++i)
-    {
-      delete[] mat[i];
-    }
-     delete[] mat;
-  }
 
   void SizeCheck(const Matrix& q)
   {
-    assert(Rows == q.Rows);
-    assert(Columns == q.Columns);
+    assert(Rows_ == q.Rows_);
+    assert(Columns_ == q.Columns_);
   }
 
   void newMatrix()
   {
-    mat = new float*[Rows];
+    mat = new int*[Rows];
     for (int i = 0; i < Rows; ++i)
     {
-      mat[i] = new float[Columns];
+      mat[i] = new int[Columns];
     }
+  }
+
+  void set_(int x, int y, float val)
+  {
+    mat[x][y] = val;
   }
 
   void Print()
@@ -72,32 +60,21 @@ class Matrix
     }
   }
 
-  float& operator()(int x, int y)
+  T& operator()(int x, int y)
   {
     return mat[x][y];
   }
 
-  void set_(int x, int y, float val)
-  {
-    mat[x][y] = val;
-  }
-
-  Matrix& operator = (const Matrix& q)
+  Matrix<Rows, Columns, T>& operator = (const Matrix& q)
   {
     if (this == &q)
     {
       return *this;
     }
-    SizeCheck(q);
-    for (int i = 0; i < Rows; ++i)
-    {
-      delete[] q.mat[i];
-    }
-    delete[] q.mat;
+    newMatrix();
 
     Rows = q.Rows;
     Columns = q.Columns;
-    newMatrix();
 
     for (int i = 0; i < Rows; ++i)
     {
@@ -109,10 +86,10 @@ class Matrix
     return *this;
   }
 
-  Matrix operator + (const Matrix& q)
+  Matrix<Rows, Columns, T> operator + (const Matrix<Rows, Columns, T>& q)
   {
     SizeCheck(q);
-    Matrix c(Rows, Columns);
+    Matrix<Rows, Columns, T> c;
     for (int i = 0; i < Rows; ++i)
     {
       for (int j = 0; j < Columns; ++j)
@@ -120,13 +97,13 @@ class Matrix
         c.mat[i][j] = q.mat[i][j] + mat[i][j];
       }
     }
-    return move(c);
+    return c;
   }
 
-  Matrix operator - (const Matrix& q)
+  Matrix<Rows, Columns, T> operator - (const Matrix& q)
   {
     SizeCheck(q);
-    Matrix c(Rows, Columns);
+    Matrix<Rows, Columns, T> c;
     for (int i = 0; i < Rows; ++i)
     {
       for (int j = 0; j < Columns; ++j)
@@ -134,16 +111,17 @@ class Matrix
         c.mat[i][j] = mat[i][j] - q.mat[i][j];
       }
     }
-    return move(c);
+    return c;
   }
 
-  Matrix operator * (const Matrix& q)
+  template<unsigned RowsQ, unsigned ColumnsQ>
+  Matrix<Rows, Columns, T> operator * (const Matrix<RowsQ, ColumnsQ, T>& q)
   {
-    assert (Columns == q.Rows);
-    Matrix c(Rows, q.Columns);
+    assert (Columns == RowsQ);
+    Matrix<Rows, ColumnsQ, T> c;
     for (int i = 0; i < Rows; ++i)
     {
-      for (int j = 0; j < q.Columns; ++j)
+      for (int j = 0; j < ColumnsQ; ++j)
       {
         for (int k = 0; k < Columns; ++k)
         {
@@ -151,7 +129,7 @@ class Matrix
         }
       }
     }
-    return move(c);
+    c.Print();
   }
 };
 
